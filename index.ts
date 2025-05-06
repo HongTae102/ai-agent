@@ -1,19 +1,19 @@
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
 import OpenAI from "openai";
-import {TripAgent} from "./src/trip-agent";
+import { PokemonAgent } from "./agents/pokemon-agent";
 
-dotenv.config()
+dotenv.config();
 
 const client = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-})
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 const run = async () => {
-    const agent = new TripAgent(client)
-    const response = await agent.askQuestion("อยากเที่ยวเชียงใหม่ 3 วัน คาเฟ่เยอะ ๆ งบ 10000 ช่วยวางแผนให้หน่อย")
-    console.log(response)
-}
+  const agent = new PokemonAgent(client);
+  const response = await agent.askQuestion("อยากจัดทีมรอบ charizard สำหรับการแข่งขัน และแนะนำ item, ability, move ให้ด้วย");
+  console.log(response);
+};
 
 run().then(() => {
-    console.log("---------------------------------------------------------------------------------")
-})
+  console.log("----------------------------------------------------------------");
+});
