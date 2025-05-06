@@ -3,7 +3,7 @@ import { PikalyticsAPIResponse } from './pokemon-data';
 
 export async function fetchPikalyticsMeta(pokemonName: string): Promise<string> {
   try {
-    const response = await fetch(`https://pikalytics.com/api/sv/ou/${pokemonName.toLowerCase()}`);
+    const response = await fetch(`https://pikalytics.com/pokedex/gen9vgc2025regi/${pokemonName.toLowerCase()}`);
     const data = await response.json() as PikalyticsAPIResponse;
 
     const usage = data.usage || "ไม่พบข้อมูล usage";
