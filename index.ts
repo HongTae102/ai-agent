@@ -1,8 +1,8 @@
 import dotenv from 'dotenv';
+dotenv.config(); 
+
 import OpenAI from "openai";
 import { PokemonAgent } from "./agents/pokemon-agent";
-
-dotenv.config();
 
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -10,7 +10,7 @@ const client = new OpenAI({
 
 const run = async () => {
   const agent = new PokemonAgent(client);
-  const response = await agent.askQuestion("อยากจัดทีมรอบ charizard สำหรับการแข่งขัน และแนะนำ item, ability, move ให้ด้วย");
+  const response = await agent.askQuestion("อยากจัดทีม miraidon สำหรับการแข่งขัน ช่วยแนะนำ ability, item, move และช่วยวิเคราะห์ทีมให้หน่อย");
   console.log(response);
 };
 

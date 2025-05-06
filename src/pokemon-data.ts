@@ -42,7 +42,6 @@ export interface Pokemon {
     };
 }
 
-  // --- สำหรับการจัดทีมแข่งขัน ---
   export interface TeamSuggestionResult {
     main: {
       name: string;
@@ -50,12 +49,10 @@ export interface Pokemon {
     };
     teammates: {
       name: string;
-      role: string;
     }[];
     strategy: string;
     references: {
       pikalytics?: string;
-      smogon?: string;
     };
   }  
 

@@ -1,7 +1,7 @@
 import { suggestTeamForPokemon } from "./src/pokemon";
 import { fetchPikalyticsTeammates } from "./src/pikalytics";
+import { analyzeTeamWithAI } from "./src/analyzeTeamWithAI";
 
-// รายชื่อ tools สำหรับ GPT agent
 export const tools = [
   {
     type: "function",
@@ -13,7 +13,7 @@ export const tools = [
         properties: {
           pokemonName: {
             type: "string",
-            description: "ชื่อของโปเกมอน เช่น 'Garchomp'",
+            description: "ชื่อของโปเกมอน",
           },
         },
         required: ["pokemonName"],
@@ -30,10 +30,37 @@ export const tools = [
         properties: {
           pokemonName: {
             type: "string",
-            description: "ชื่อของโปเกมอน เช่น 'Garchomp'",
+            description: "ชื่อของโปเกมอน",
           },
         },
         required: ["pokemonName"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "analyzeTeamWithAI",
+      description: "วิเคราะห์ทีม Pokémon ที่สร้างขึ้น",
+      parameters: {
+        type: "object",
+        properties: {
+          main: {
+            type: "string",
+            description: "ชื่อโปเกมอนหลักในทีม",
+          },
+          teammates: {
+            type: "array",
+            items: { type: "string" },
+            description: "รายชื่อ teammate ที่ใช้ในทีม",
+          },
+          counterTypes: {
+            type: "array",
+            items: { type: "string" },
+            description: "ประเภทที่โปเกมอนหลักแพ้ทาง",
+          },
+        },
+        required: ["main", "teammates", "counterTypes"],
       },
     },
   },
@@ -42,4 +69,5 @@ export const tools = [
 export const availableTools: Record<string, Function> = {
   suggestTeamForPokemon,
   fetchPikalyticsTeammates,
+  analyzeTeamWithAI,
 };

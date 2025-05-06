@@ -1,6 +1,7 @@
-import { fetchPikalyticsMeta, fetchSmogonMeta } from "./fetchPokemonMeta";
+import { fetchPikalyticsMeta } from "./fetchPokemonMeta";
 import { fetchPikalyticsTeammates } from "./pikalytics";
 import { Pokemon, TeamSuggestionResult } from "./pokemon-data";
+import { analyzeTeamWithAI } from "./analyzeTeamWithAI";
 
 /**
  * ดึงข้อมูล Pokémon จาก PokeAPI
@@ -26,21 +27,19 @@ export async function suggestTeamForPokemon(
 
   let teammates;
   if (teammatesData && teammatesData.length > 0) {
-    teammates = teammatesData.slice(0, 3).map((name, index) => ({
+    teammates = teammatesData.slice(0, 5).map((name, index) => ({
       name,
-      role: getTeamRole(index),
     }));
   } else {
     teammates = await Promise.all(
       counterTypes.map(async (t, index) => ({
         name: await getExamplePokemonByType(t),
-        role: getTeamRole(index),
       }))
     );
   }
 
   const pikalyticsMeta = await fetchPikalyticsMeta(pokemonName);
-  const smogonMeta = await fetchSmogonMeta(pokemonName);
+  const strategy = await analyzeTeamWithAI(main.name, teammates.map(t => t.name), counterTypes);
 
   return {
     main: {
@@ -48,10 +47,9 @@ export async function suggestTeamForPokemon(
       types: main.types.map((t) => t.type.name),
     },
     teammates,
-    strategy: `ทีมนี้ถูกสร้างโดยอิงจากการเสริมจุดอ่อนของ ${main.name} โดยพิจารณาจากประเภทที่แพ้ (${counterTypes.join(", ")}) และข้อมูลการใช้งานจากเว็บไซต์ต่าง ๆ`,
+    strategy,
     references: {
       pikalytics: pikalyticsMeta,
-      smogon: smogonMeta,
     },
   };
 }
@@ -92,11 +90,3 @@ export async function getExamplePokemonByType(type: string): Promise<string> {
       return "pikachu"; // fallback
     }
   }
-
-/**
- * ระบุบทบาทในทีมจากตำแหน่ง
- */
-function getTeamRole(index: number): string {
-  const roles = ["wall", "sweeper", "support", "hazard setter", "tank", "utility"];
-  return roles[index % roles.length];
-}
