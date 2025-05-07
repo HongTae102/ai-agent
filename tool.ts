@@ -1,6 +1,7 @@
 import { suggestTeamForPokemon, suggestTeamForPokemonSingle } from "./src/pokemon";
 import { fetchPikalyticsTeammates } from "./src/pikalytics";
 import { analyzeTeamWithAI } from "./src/analyzeTeamWithAI";
+import { analyzeMatchupWithAI } from "./src/analyzeMatchupWithAI";
 
 export const tools = [
   {
@@ -41,7 +42,7 @@ export const tools = [
     type: "function",
     function: {
       name: "analyzeTeamWithAI",
-      description: "วิเคราะห์ทีม Pokémon ที่สร้างขึ้น",
+      description: "แนะนำทีมที่เหมาะกับโปเกมอนหนึ่งตัว วิเคราะห์ทีม Pokémon ที่สร้างขึ้น",
       parameters: {
         type: "object",
         properties: {
@@ -81,6 +82,29 @@ export const tools = [
       },
     },
   },
+  {
+    type: "function",
+    function: {
+      name: "analyzeMatchupWithAI",
+      description: "วิเคราะห์ matchup ระหว่างทีมเราและทีมศัตรู",
+      parameters: {
+        type: "object",
+        properties: {
+          myTeam: {
+            type: "array",
+            items: { type: "string" },
+            description: "ชื่อโปเกมอนของเราทั้ง 6 ตัว",
+          },
+          enemyTeam: {
+            type: "array",
+            items: { type: "string" },
+            description: "ชื่อโปเกมอนของฝ่ายตรงข้ามทั้ง 6 ตัว",
+          },
+        },
+        required: ["myTeam", "enemyTeam"],
+      },
+    },
+  }
 ];
 
 export const availableTools: Record<string, Function> = {
@@ -88,4 +112,5 @@ export const availableTools: Record<string, Function> = {
   fetchPikalyticsTeammates,
   analyzeTeamWithAI,
   suggestTeamForPokemonSingle,
+  analyzeMatchupWithAI,
 };

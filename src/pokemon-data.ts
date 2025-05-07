@@ -60,3 +60,10 @@ export interface Pokemon {
     usage?: string;
     teammates?: { name: string }[];
   }
+
+  export interface MatchupAnalysisResult {
+    leadRecommendation: string; 
+    threats: string[];          
+    safeOptions: string[];      
+    strategy: string;           
+  }

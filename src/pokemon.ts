@@ -1,5 +1,6 @@
-import { Pokemon, TeamSuggestionResult } from "./pokemon-data";
+import { Pokemon, TeamSuggestionResult, MatchupAnalysisResult } from "./pokemon-data";
 import { analyzeTeamWithAI } from "./analyzeTeamWithAI";
+import { analyzeMatchupWithAI } from "./analyzeMatchupWithAI";
 
 /**
  * ดึงข้อมูล Pokémon จาก PokeAPI
@@ -32,7 +33,7 @@ export async function suggestTeamForPokemon(pokemonName: string): Promise<TeamSu
     teammates,
     strategy,
     references: {
-      pikalytics: "-", // อาจไม่จำเป็นถ้าใช้ AI ทั้งหมด
+      pikalytics: `https://pikalytics.com/pokedex/gen9vgc2025regi/${pokemonName.toLowerCase()}`
     },
   };
 }
@@ -97,3 +98,18 @@ export async function getExamplePokemonByType(type: string): Promise<string> {
       return "pikachu"; // fallback
     }
   }
+
+  export async function analyzeMatchup(
+    myTeam: string[],
+    enemyTeam: string[]
+  ): Promise<MatchupAnalysisResult> {
+    const result = await analyzeMatchupWithAI(myTeam, enemyTeam);
+  
+    return {
+      leadRecommendation: result.lead,
+      threats: result.threats,
+      safeOptions: result.safeOptions,
+      strategy: result.strategy,
+    };
+  }
+  
