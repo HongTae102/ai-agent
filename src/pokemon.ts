@@ -37,6 +37,30 @@ export async function suggestTeamForPokemon(pokemonName: string): Promise<TeamSu
   };
 }
 
+export async function suggestTeamForPokemonSingle(pokemonName: string): Promise<TeamSuggestionResult> {
+  const main = await getPokemon(pokemonName);
+  const type = main.types[0]?.type.name;
+  const counterTypes = await getCounterTypes(type);
+
+  const aiResult = await analyzeTeamWithAI(main.name, counterTypes, "single");
+
+  const teammates = aiResult.teammates.map((name) => ({ name }));
+  const strategy = aiResult.reasoning;
+
+  return {
+    main: {
+      name: main.name,
+      types: main.types.map((t) => t.type.name),
+    },
+    teammates,
+    strategy,
+    references: {
+      pikalytics: `https://pikalytics.com/pokedex/homebss/${pokemonName.toLowerCase()}`
+    },
+  };
+}
+
+
 /**
  * คืนค่าประเภทที่อาจแพ้ทาง เพื่อใช้ประกอบ logic การเลือกทีม
  */

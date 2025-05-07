@@ -1,4 +1,4 @@
-import { suggestTeamForPokemon } from "./src/pokemon";
+import { suggestTeamForPokemon, suggestTeamForPokemonSingle } from "./src/pokemon";
 import { fetchPikalyticsTeammates } from "./src/pikalytics";
 import { analyzeTeamWithAI } from "./src/analyzeTeamWithAI";
 
@@ -64,10 +64,28 @@ export const tools = [
       },
     },
   },
+  {
+    type: "function",
+    function: {
+      name: "suggestTeamForPokemonSingle",
+      description: "แนะนำทีมที่เหมาะกับโปเกมอนหนึ่งตัวในโหมด Single Battle (BSS)",
+      parameters: {
+        type: "object",
+        properties: {
+          pokemonName: {
+            type: "string",
+            description: "ชื่อของโปเกมอน",
+          },
+        },
+        required: ["pokemonName"],
+      },
+    },
+  },
 ];
 
 export const availableTools: Record<string, Function> = {
   suggestTeamForPokemon,
   fetchPikalyticsTeammates,
   analyzeTeamWithAI,
+  suggestTeamForPokemonSingle,
 };

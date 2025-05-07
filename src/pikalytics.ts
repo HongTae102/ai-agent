@@ -41,3 +41,30 @@ export async function fetchPikalyticsTeammates(pokemonName: string): Promise<str
     return [];
   }
 }
+
+export async function fetchPikalyticsTeammatesSingle(pokemonName: string): Promise<string[]> {
+  try {
+    const url = `https://pikalytics.com/pokedex/homebss/${pokemonName.toLowerCase()}`;
+
+    const browser = await puppeteer.launch({ headless: true });
+    const page = await browser.newPage();
+    await page.goto(url, { waitUntil: 'domcontentloaded' });
+
+    await page.waitForSelector('a.teammate_entry', { timeout: 30000 });
+
+    const teammates = await page.$$eval('a.teammate_entry', (elements) =>
+      elements
+        .map((el) => el.getAttribute('data-name'))
+        .filter((name): name is string => !!name)
+    );
+
+    await browser.close();
+
+    return teammates;
+    
+  } catch (err) {
+    console.error("fetchPikalyticsTeammatesSingle error:", err);
+    return [];
+  }
+}
+

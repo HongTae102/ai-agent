@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import { fetchPikalyticsTeammates } from "./pikalytics";
+import { fetchPikalyticsTeammates, fetchPikalyticsTeammatesSingle } from "./pikalytics";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -7,15 +7,16 @@ const openai = new OpenAI({
 
 export async function analyzeTeamWithAI(
   main: string,
-  counterTypes: string[]
+  counterTypes: string[],
+  mode: "vgc" | "single" = "vgc"
 ): Promise<{ teammates: string[]; reasoning: string }> {
   const typeList = counterTypes.join(", ");
-  
-  const metaTeammates = await fetchPikalyticsTeammates(main);
+  const teammateFetcher = mode === "vgc" ? fetchPikalyticsTeammates : fetchPikalyticsTeammatesSingle;
+  const metaTeammates = await teammateFetcher(main);
   const teammateList = metaTeammates.join(", ");
 
   const prompt = `
-  คุณเป็นผู้เชี่ยวชาญด้านการแข่งขัน Pokémon VGC 2025
+  คุณคือผู้เชี่ยวชาญการแข่งขัน Pokémon ${mode === "vgc" ? "VGC 2025 (Double Battle)" : "Battle Stadium Singles"}
   
   โปเกมอนหลักของฉันคือ: ${main}
   ประเภทที่โปเกมอนนี้แพ้ทางคือ: ${typeList}
@@ -40,7 +41,7 @@ export async function analyzeTeamWithAI(
   5. ความ synergy ระหว่างสมาชิกในทีม
   6. เริ่มเกมมาควรทำยังไงบ้าง
   7. แพ้ทางทีมแบบใด
-  8. และเสนอแนะเพิ่มเติมถ้าจำเป็น
+  8. เสนอแนะเพิ่มเติมถ้าจำเป็น
   
   🎯 กรุณาตอบกลับในรูปแบบ JSON ดังนี้:
   {
