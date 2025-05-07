@@ -10,7 +10,7 @@ const client = new OpenAI({
 
 const run = async () => {
   const agent = new PokemonAgent(client);
-  const response = await agent.askQuestion("อยากจัดทีม miraidon สำหรับการแข่งขัน ช่วยแนะนำ ability, item, move และช่วยวิเคราะห์ทีมให้หน่อย");
+  const response = await agent.askQuestion("อยากจัดทีม garchomp");
   console.log(response);
 };
 

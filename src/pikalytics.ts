@@ -18,18 +18,24 @@ export async function fetchPikalyticsTeammates(pokemonName: string): Promise<str
 
     await browser.close();
 
-    // เติม teammate ให้ครบ 5 ตัว ถ้ายังไม่พอ
-    const fallbackTeammates = ["NULL", "NULL", "NULL", "NULL", "NULL"];
+    console.log("Actual teammates found:", teammates.length);
+
+    // หากไม่ต้องเติม NULL:
+    return teammates;
+
+    // หรือหากยังอยากให้มี fallback แต่ไม่ตัดเหลือ 5 ตัว:
+    /*
+    const fallbackTeammates = ["NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL"];
     const finalTeammates = [...teammates];
 
     for (const fallback of fallbackTeammates) {
-      if (finalTeammates.length >= 5) break;
       if (!finalTeammates.includes(fallback) && fallback.toLowerCase() !== pokemonName.toLowerCase()) {
         finalTeammates.push(fallback);
       }
     }
 
-    return finalTeammates.slice(0, 5);
+    return finalTeammates;
+    */
   } catch (err) {
     console.error("fetchPikalyticsTeammates error:", err);
     return [];

@@ -1,5 +1,3 @@
-import { fetchPikalyticsMeta } from "./fetchPokemonMeta";
-import { fetchPikalyticsTeammates } from "./pikalytics";
 import { Pokemon, TeamSuggestionResult } from "./pokemon-data";
 import { analyzeTeamWithAI } from "./analyzeTeamWithAI";
 
@@ -16,30 +14,15 @@ export async function getPokemon(name: string): Promise<Pokemon> {
  * ฟังก์ชันสำหรับแนะนำทีม Pokémon
  * รับชื่อ Pokémon ตัวหลัก แล้วคืนค่าทีมที่น่าจะเหมาะสมสำหรับแข่งขัน
  */
-export async function suggestTeamForPokemon(
-  pokemonName: string
-): Promise<TeamSuggestionResult> {
+export async function suggestTeamForPokemon(pokemonName: string): Promise<TeamSuggestionResult> {
   const main = await getPokemon(pokemonName);
   const type = main.types[0]?.type.name;
   const counterTypes = await getCounterTypes(type);
 
-  let teammatesData = await fetchPikalyticsTeammates(pokemonName);
+  const aiResult = await analyzeTeamWithAI(main.name, counterTypes);
 
-  let teammates;
-  if (teammatesData && teammatesData.length > 0) {
-    teammates = teammatesData.slice(0, 5).map((name, index) => ({
-      name,
-    }));
-  } else {
-    teammates = await Promise.all(
-      counterTypes.map(async (t, index) => ({
-        name: await getExamplePokemonByType(t),
-      }))
-    );
-  }
-
-  const pikalyticsMeta = await fetchPikalyticsMeta(pokemonName);
-  const strategy = await analyzeTeamWithAI(main.name, teammates.map(t => t.name), counterTypes);
+  const teammates = aiResult.teammates.map((name) => ({ name }));
+  const strategy = aiResult.reasoning;
 
   return {
     main: {
@@ -49,7 +32,7 @@ export async function suggestTeamForPokemon(
     teammates,
     strategy,
     references: {
-      pikalytics: pikalyticsMeta,
+      pikalytics: "-", // อาจไม่จำเป็นถ้าใช้ AI ทั้งหมด
     },
   };
 }
