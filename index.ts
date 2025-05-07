@@ -10,7 +10,8 @@ const client = new OpenAI({
 
 const run = async () => {
   const agent = new PokemonAgent(client);
-  const response = await agent.askQuestion("ถ้าทีมเรามี Garchomp, Rotom-Wash, Togekiss, snorlax, charizard, iron-hand เจอ Flutter Mane, Iron Bundle, Kingambit, raichu, tyranitar, miraidon ควรเล่นยังไง?");
+  const response = await agent.askQuestion("อยากจัดทีม garchomp");
+  // const response = await agent.askQuestion("ถ้าทีมเรามี Garchomp, Rotom-Wash, Togekiss, snorlax, charizard, iron-hand เจอ Flutter Mane, Iron Bundle, Kingambit, raichu, tyranitar, miraidon ควรเล่นยังไง?");
   console.log(response);
 };
 
