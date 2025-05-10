@@ -54,7 +54,7 @@ export async function analyzeTeamWithAI(
   const response = await openai.chat.completions.create({
     model: "gpt-4o-mini",
     messages: [{ role: "user", content: prompt }],
-    temperature: 0.5,
+    temperature: 0.7,
   });
 
   const rawText = response.choices[0].message.content ?? "";

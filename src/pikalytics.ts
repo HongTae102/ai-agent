@@ -18,8 +18,6 @@ export async function fetchPikalyticsTeammates(pokemonName: string): Promise<str
 
     await browser.close();
 
-    console.log("Actual teammates found:", teammates.length);
-
     // หากไม่ต้องเติม NULL:
     return teammates;
 

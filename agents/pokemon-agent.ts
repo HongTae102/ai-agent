@@ -116,7 +116,7 @@ export class PokemonAgent {
             const response = await this.client.chat.completions.create({
                 model: 'gpt-4o-mini',
                 messages: this.messages as any,
-                temperature: 0.5,
+                temperature: 0.7,
                 tools: tools as any,
             });
 

@@ -33,7 +33,7 @@ ${enemyTeam.join(", ")}
 
   const res = await openai.chat.completions.create({
     model: "gpt-4o-mini",
-    temperature: 0.5,
+    temperature: 0.7,
     messages: [{ role: "user", content: prompt }],
   });
 
